@@ -1,11 +1,14 @@
-package plugins
+package linplug
 
-type LinuxPlatform struct {}
+type LinuxPlatform struct {
+	Name string
+}
 
-func (self *LinuxPlatform) OsType() string {
+func (self LinuxPlatform) OsType() string {
 	return "linux"
 }
 
-func (self *LinuxPlatform) Run() {
-
+func (self LinuxPlatform) CollectData() map[string]interface{} {
+	data := make(map[string]interface{})
+	return data
 }
