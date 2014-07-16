@@ -6,15 +6,15 @@ import (
 	"github.com/kyleterry/go-detective/plugins"
 )
 
-func getOSType() string {
+func getBirdsEyeOSType() string {
 	return runtime.GOOS
 }
 
 func CollectData() map[string]interface{}{
-	registerPlugins()
 	data := make(map[string]interface{})
-	switch getOSType() {
+	switch getBirdsEyeOSType() {
 		case "linux":
+			registerLinuxPlugins()
 			for lp := linuxPlugins.plugins.Front(); lp != nil; lp = lp.Next() {
 				plug := lp.Value.(plugins.Plugin)
 				name, d := plug.CollectData()
