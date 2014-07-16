@@ -2,9 +2,20 @@ package detective
 
 import (
 	"fmt"
+	stdlog "log"
+	"os"
 	"runtime"
 	"github.com/kyleterry/go-detective/plugins"
+	"github.com/op/go-logging"
 )
+
+var log = logging.MustGetLogger("detective")
+
+func Init() {
+	logBackend := logging.NewLogBackend(os.Stdout, "", stdlog.LstdFlags)
+	logBackend.Color = true
+	logging.SetBackend(logBackend)
+}
 
 func getBirdsEyeOSType() string {
 	return runtime.GOOS

@@ -1,7 +1,6 @@
 package linplug
 
 import (
-	"log"
 	"io/ioutil"
 	"os"
 	"regexp"
