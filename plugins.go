@@ -19,8 +19,7 @@ var linuxPlugins osPluginsRegistry
 var osxPlugins osPluginsRegistry
 var windowsPlugins osPluginsRegistry
 
-func registerPlugins() {
-	// Try to make this more lazy. Maybe call after detecting the OS?
+func registerAllPlugins() {
 	registerLinuxPlugins()
 	registerOsxplugins()
 	registerWindowsPlugins()
