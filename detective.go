@@ -17,13 +17,13 @@ func Init() {
 	logging.SetBackend(logBackend)
 }
 
-func getBirdsEyeOSType() string {
+func GetBirdsEyeOSType() string {
 	return runtime.GOOS
 }
 
 func CollectData() map[string]interface{}{
 	data := make(map[string]interface{})
-	switch getBirdsEyeOSType() {
+	switch GetBirdsEyeOSType() {
 		case "linux":
 			registerLinuxPlugins()
 			for lp := linuxPlugins.plugins.Front(); lp != nil; lp = lp.Next() {
