@@ -1,5 +1,7 @@
 # Go Detective
 
+An ohai-like platform sniffer for Go.
+
 ## Usage
 
 ```go
