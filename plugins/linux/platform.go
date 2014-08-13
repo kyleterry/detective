@@ -4,8 +4,12 @@ import (
 	"io/ioutil"
 	"os"
 	"regexp"
+
 	"github.com/kyleterry/go-detective/utils"
+	"github.com/op/go-logging"
 )
+
+var log = logging.MustGetLogger("detective")
 
 type LinuxPlatform struct {
 	Name string

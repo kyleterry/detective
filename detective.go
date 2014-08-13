@@ -1,11 +1,10 @@
 package detective
 
 import (
-	"fmt"
 	stdlog "log"
 	"os"
-	"runtime"
 	"github.com/kyleterry/go-detective/plugins"
+	"github.com/kyleterry/go-detective/utils"
 	"github.com/op/go-logging"
 )
 
@@ -17,13 +16,9 @@ func Init() {
 	logging.SetBackend(logBackend)
 }
 
-func GetBirdsEyeOSType() string {
-	return runtime.GOOS
-}
-
 func CollectData() map[string]interface{}{
 	data := make(map[string]interface{})
-	switch GetBirdsEyeOSType() {
+	switch utils.GetBirdsEyeOSType() {
 		case "linux":
 			registerLinuxPlugins()
 			for lp := linuxPlugins.plugins.Front(); lp != nil; lp = lp.Next() {
@@ -31,7 +26,14 @@ func CollectData() map[string]interface{}{
 				name, d := plug.CollectData()
 				data[name] = d
 			}
+		case "darwin":
+			registerOSXPlugins()
+			for op := osxPlugins.plugins.Front(); op != nil; op = op.Next() {
+				plug := op.Value.(plugins.Plugin)
+				name, d := plug.CollectData()
+				data[name] = d
+			}
+			
 	}
-	fmt.Printf("%+v", data)
 	return data
 }

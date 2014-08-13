@@ -4,7 +4,7 @@ import (
 	"os"
 	"os/exec"
 	"io/ioutil"
-	"github.com/kyleterry/go-detective"
+	"runtime"
 	"github.com/op/go-logging"
 )
 
@@ -17,7 +17,7 @@ type cacheStore struct {
 var cache cacheStore
 
 func GetRawLSB() (string, error) {
-	if detective.GetBirdsEyeOSType() != "linux" {
+	if GetBirdsEyeOSType() != "linux" {
 		log.Fatal("Can't get LSB information from non Linux system")
 	}
 
@@ -39,3 +39,8 @@ func GetRawLSB() (string, error) {
 	}
 	return cache.lsbCache, nil
 }
+
+func GetBirdsEyeOSType() string {
+	return runtime.GOOS
+}
+

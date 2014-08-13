@@ -4,6 +4,7 @@ import (
 	"container/list"
 	"github.com/kyleterry/go-detective/plugins"
 	"github.com/kyleterry/go-detective/plugins/linux"
+	"github.com/kyleterry/go-detective/plugins/osx"
 )
 
 
@@ -21,7 +22,7 @@ var windowsPlugins osPluginsRegistry
 
 func registerAllPlugins() {
 	registerLinuxPlugins()
-	registerOsxplugins()
+	registerOSXPlugins()
 	registerWindowsPlugins()
 }
 
@@ -31,8 +32,10 @@ func registerLinuxPlugins() {
 	linuxPlugins.RegisterPlugin(platform)
 }
 
-func registerOsxplugins() {
+func registerOSXPlugins() {
 	osxPlugins.plugins = list.New()
+	platform := osxplug.OSXPlatform{"platform"}
+	osxPlugins.RegisterPlugin(platform)
 }
 
 func registerWindowsPlugins() {
