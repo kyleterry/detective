@@ -5,7 +5,7 @@ import (
 	"os"
 	"regexp"
 
-	"github.com/kyleterry/go-detective/utils"
+	"github.com/kyleterry/detective/utils"
 	"github.com/op/go-logging"
 )
 

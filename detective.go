@@ -3,8 +3,8 @@ package detective
 import (
 	stdlog "log"
 	"os"
-	"github.com/kyleterry/go-detective/plugins"
-	"github.com/kyleterry/go-detective/utils"
+	"github.com/kyleterry/detective/plugins"
+	"github.com/kyleterry/detective/utils"
 	"github.com/op/go-logging"
 )
 

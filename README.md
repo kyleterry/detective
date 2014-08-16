@@ -8,7 +8,7 @@ An ohai-like platform sniffer for Go.
 package main
 
 import "fmt"
-import "github.com/kyleterry/go-detective"
+import "github.com/kyleterry/detective"
 
 func main() {
     detective.Init()

@@ -2,9 +2,9 @@ package detective
 
 import (
 	"container/list"
-	"github.com/kyleterry/go-detective/plugins"
-	"github.com/kyleterry/go-detective/plugins/linux"
-	"github.com/kyleterry/go-detective/plugins/osx"
+	"github.com/kyleterry/detective/plugins"
+	"github.com/kyleterry/detective/plugins/linux"
+	"github.com/kyleterry/detective/plugins/osx"
 )
 
 
