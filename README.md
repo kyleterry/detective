@@ -1,4 +1,4 @@
-# Go Detective
+# Detective
 
 An ohai-like platform sniffer for Go.
 
