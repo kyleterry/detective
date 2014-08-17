@@ -10,7 +10,7 @@ import (
 
 var log = logging.MustGetLogger("detective")
 
-func Init() {
+func Init(debug bool) {
 	logBackend := logging.NewLogBackend(os.Stdout, "", stdlog.LstdFlags)
 	logBackend.Color = true
 	logging.SetBackend(logBackend)
@@ -20,6 +20,7 @@ func CollectData() map[string]interface{}{
 	data := make(map[string]interface{})
 	switch utils.GetBirdsEyeOSType() {
 		case "linux":
+			log.Debug("On Linux. Registring Linux plugins...")
 			registerLinuxPlugins()
 			for lp := linuxPlugins.plugins.Front(); lp != nil; lp = lp.Next() {
 				plug := lp.Value.(plugins.Plugin)
@@ -28,6 +29,7 @@ func CollectData() map[string]interface{}{
 			}
 		case "darwin":
 			registerOSXPlugins()
+			log.Debug("On OS X. Registring Darwin plugins...")
 			for op := osxPlugins.plugins.Front(); op != nil; op = op.Next() {
 				plug := op.Value.(plugins.Plugin)
 				name, d := plug.CollectData()

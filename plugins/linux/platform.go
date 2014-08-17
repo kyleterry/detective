@@ -6,10 +6,8 @@ import (
 	"regexp"
 
 	"github.com/kyleterry/detective/utils"
-	"github.com/op/go-logging"
 )
 
-var log = logging.MustGetLogger("detective")
 
 type LinuxPlatform struct {
 	Name string
@@ -25,15 +23,17 @@ func (self LinuxPlatform) CollectData() (string, map[string]interface{}) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	if _, err := os.Stat("/etc/debian-version"); err == nil {
+	log.Debug("Detecting distro")
+	if _, err := os.Stat("/etc/debian_version"); err == nil {
+		log.Debug("Found Debian")
 		deb_re := regexp.MustCompile("/Ubuntu/")
 		if deb_re.MatchString(rawLsb) {
 			data["version"] = "ubuntu"
 		} else {
 			data["distro"] = "debian"
 		}
-		deb_ver, _ := ioutil.ReadFile("/etc/debian-version")
-		data["version"] = deb_ver
+		deb_ver, _ := ioutil.ReadFile("/etc/debian_version")
+		data["version"] = string(deb_ver)
 	} else if _, err := os.Stat("/etc/gentoo-release"); err == nil {
 		data["distro"] = "gentoo"
 		gentoo_ver, _ := ioutil.ReadFile("/etc/gentoo-release")
