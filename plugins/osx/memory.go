@@ -1,1 +1,1 @@
-package osxplug
+package osx

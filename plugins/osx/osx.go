@@ -1,4 +1,4 @@
-package osxplug
+package osx
 
 import (
 	"github.com/op/go-logging"

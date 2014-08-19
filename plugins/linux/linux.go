@@ -1,4 +1,4 @@
-package linplug
+package linux
 
 import (
 	"github.com/op/go-logging"

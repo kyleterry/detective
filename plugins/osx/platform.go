@@ -1,4 +1,4 @@
-package osxplug
+package osx
 
 import (
 	"os/exec"

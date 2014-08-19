@@ -28,13 +28,15 @@ func registerAllPlugins() {
 
 func registerLinuxPlugins() {
 	linuxPlugins.plugins = list.New()
-	platform := linplug.LinuxPlatform{"platform"}
+	platform := linux.LinuxPlatform{"platform"}
 	linuxPlugins.RegisterPlugin(platform)
+	memory := linux.LinuxMemory{"memory"}
+	linuxPlugins.RegisterPlugin(memory)
 }
 
 func registerOSXPlugins() {
 	osxPlugins.plugins = list.New()
-	platform := osxplug.OSXPlatform{"platform"}
+	platform := osx.OSXPlatform{"platform"}
 	osxPlugins.RegisterPlugin(platform)
 }
 
