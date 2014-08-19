@@ -3,6 +3,7 @@ package linux
 import (
 	"os"
 	"bufio"
+	"fmt"
 	"strings"
 	"strconv"
 )
@@ -34,8 +35,12 @@ func (self LinuxMemory) CollectData() (string, map[string]interface{}) {
 	for scanner.Scan() {
 		line := scanner.Text()
 		section, value = SplitMeminfoLine(line)
+		fmt.Println(line)
+		fmt.Println(section)
+		fmt.Println(value)
 		switch section {
 		case "MemTotal":
+			fmt.Println(value)
 			value_int, err = strconv.Atoi(value)
 			if err != nil {
 				log.Fatal(err)
@@ -48,14 +53,6 @@ func (self LinuxMemory) CollectData() (string, map[string]interface{}) {
 }
 
 func SplitMeminfoLine(line string) (string, string) {
-	var idx int
-	idx = strings.Index(line, " ")
-	if idx == -1 {
-		log.Fatal("Can't parse meminfo file")
-	}
-	section := string(line[:idx - 1])
-	line = line[idx:]
-	idx = strings.Index(line, " ")
-	value := string(line[:idx])
-	return section, value
+	fields := strings.Fields(line)
+	return string(fields[0][:len(fields[0])-1]), fields[1]
 }
