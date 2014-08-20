@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 	"regexp"
+	"strings"
 
 	"github.com/kyleterry/detective/utils"
 )
@@ -19,6 +20,7 @@ func (self LinuxPlatform) OsType() string {
 
 func (self LinuxPlatform) CollectData() (string, map[string]interface{}) {
 	data := make(map[string]interface{})
+	var version []byte
 	rawLsb, err := utils.GetRawLSB()
 	if err != nil {
 		log.Fatal(err)
@@ -32,20 +34,18 @@ func (self LinuxPlatform) CollectData() (string, map[string]interface{}) {
 		} else {
 			data["distro"] = "debian"
 		}
-		deb_ver, _ := ioutil.ReadFile("/etc/debian_version")
-		data["version"] = string(deb_ver)
+		version, _ = ioutil.ReadFile("/etc/debian_version")
 	} else if _, err := os.Stat("/etc/gentoo-release"); err == nil {
 		data["distro"] = "gentoo"
-		gentoo_ver, _ := ioutil.ReadFile("/etc/gentoo-release")
-		data["version"] = string(gentoo_ver)
+		version, _ = ioutil.ReadFile("/etc/gentoo-release")
 	} else if _, err := os.Stat("/etc/arch-release"); err == nil {
 		data["distro"] = "arch"
-		data["version"] = ""
+		version = nil
 	} else if _, err := os.Stat("/etc/slackware-version"); err == nil {
 		data["distro"] = "slackware"
-		slack_ver, _ := ioutil.ReadFile("/etc/slackware-version")
-		data["version"] = string(slack_ver)
+		version, _ = ioutil.ReadFile("/etc/slackware-version")
 	}
+	data["version"] = strings.TrimSpace(string(version))
 
 	return self.Name, data
 }

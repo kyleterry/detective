@@ -3,7 +3,6 @@ package linux
 import (
 	"os"
 	"bufio"
-	"fmt"
 	"strings"
 	"strconv"
 )
@@ -20,6 +19,9 @@ func (self LinuxMemory) OsType() string {
 	return "linux"
 }
 
+// LinuxMemory.CollectData returns memory information about the system.
+// Values are in KB.
+// Returns a string and a map[string]interface{}.
 func (self LinuxMemory) CollectData() (string, map[string]interface{}) {
 	data := make(map[string]interface{})
 	file, err := os.Open(MeminfoFile)
@@ -35,23 +37,17 @@ func (self LinuxMemory) CollectData() (string, map[string]interface{}) {
 	for scanner.Scan() {
 		line := scanner.Text()
 		section, value = SplitMeminfoLine(line)
-		fmt.Println(line)
-		fmt.Println(section)
-		fmt.Println(value)
-		switch section {
-		case "MemTotal":
-			fmt.Println(value)
-			value_int, err = strconv.Atoi(value)
-			if err != nil {
-				log.Fatal(err)
-			}
-			value_int = value_int / 1024 / 1024
-			data[section] = value_int
+		value_int, err = strconv.Atoi(value)
+		if err != nil {
+			log.Fatal(err)
 		}
+		data[section] = value_int
 	}
 	return self.Name, data
 }
 
+// SplitMeminfoLine splits each line of /proc/meminfo into key/value pairs.
+// Returns a string and a string pair.
 func SplitMeminfoLine(line string) (string, string) {
 	fields := strings.Fields(line)
 	return string(fields[0][:len(fields[0])-1]), fields[1]
