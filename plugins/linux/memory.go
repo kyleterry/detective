@@ -5,6 +5,8 @@ import (
 	"bufio"
 	"strings"
 	"strconv"
+
+	"github.com/kyleterry/detective/plugins"
 )
 
 type LinuxMemory struct {
@@ -22,8 +24,8 @@ func (self LinuxMemory) OsType() string {
 // LinuxMemory.CollectData returns memory information about the system.
 // Values are in KB.
 // Returns a string and a map[string]interface{}.
-func (self LinuxMemory) CollectData() (string, map[string]interface{}) {
-	data := make(map[string]interface{})
+func (self LinuxMemory) CollectData() (string, map[string]*plugins.MetricValue) {
+	data := make(map[string]*plugins.MetricValue)
 	file, err := os.Open(MeminfoFile)
 	if err != nil {
 		log.Fatal(err)
@@ -41,7 +43,7 @@ func (self LinuxMemory) CollectData() (string, map[string]interface{}) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		data[section] = value_int
+		data[section] = &plugins.MetricValue{string(value_int)}
 	}
 	return self.Name, data
 }
