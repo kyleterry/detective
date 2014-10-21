@@ -1,15 +1,14 @@
-package linux
+// +build linux
+package plugins
 
 import (
 	"os"
 	"bufio"
 	"strings"
 	"strconv"
-
-	"github.com/kyleterry/detective/plugins"
 )
 
-type LinuxMemory struct {
+type Memory struct {
 	Name string
 }
 
@@ -17,15 +16,15 @@ const (
 	MeminfoFile = "/proc/meminfo"
 )
 
-func (self LinuxMemory) OsType() string {
+func (self Memory) OsType() string {
 	return "linux"
 }
 
-// LinuxMemory.CollectData returns memory information about the system.
+// Memory.CollectData returns memory information about the system.
 // Values are in KB.
 // Returns a string and a map[string]interface{}.
-func (self LinuxMemory) CollectData() (string, map[string]*plugins.MetricValue) {
-	data := make(map[string]*plugins.MetricValue)
+func (self Memory) CollectData() (string, map[string]*MetricValue) {
+	data := make(map[string]*MetricValue)
 	file, err := os.Open(MeminfoFile)
 	if err != nil {
 		log.Fatal(err)
@@ -43,7 +42,7 @@ func (self LinuxMemory) CollectData() (string, map[string]*plugins.MetricValue) 
 		if err != nil {
 			log.Fatal(err)
 		}
-		data[section] = &plugins.MetricValue{string(value_int)}
+		data[section] = &MetricValue{string(value_int)}
 	}
 	return self.Name, data
 }

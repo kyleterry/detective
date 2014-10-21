@@ -1,4 +1,5 @@
-package linux
+// +build linux
+package plugins
 
 import (
 	"io/ioutil"
@@ -7,20 +8,19 @@ import (
 	"strings"
 
 	"github.com/kyleterry/detective/utils"
-	"github.com/kyleterry/detective/plugins"
 )
 
 
-type LinuxPlatform struct {
+type Platform struct {
 	Name string
 }
 
-func (self LinuxPlatform) OsType() string {
+func (self Platform) OsType() string {
 	return "linux"
 }
 
-func (self LinuxPlatform) CollectData() (string, map[string]*plugins.MetricValue) {
-	data := make(map[string]*plugins.MetricValue)
+func (self Platform) CollectData() (string, map[string]*MetricValue) {
+	data := make(map[string]*MetricValue)
 	var version []byte
 	rawLsb, err := utils.GetRawLSB()
 	if err != nil {
@@ -31,22 +31,22 @@ func (self LinuxPlatform) CollectData() (string, map[string]*plugins.MetricValue
 		log.Debug("Found Debian")
 		deb_re := regexp.MustCompile("/Ubuntu/")
 		if deb_re.MatchString(rawLsb) {
-			data["version"] = &plugins.MetricValue{string("ubuntu")}
+			data["version"] = &MetricValue{string("ubuntu")}
 		} else {
-			data["distro"] = &plugins.MetricValue{string("debian")}
+			data["distro"] = &MetricValue{string("debian")}
 		}
 		version, _ = ioutil.ReadFile("/etc/debian_version")
 	} else if _, err := os.Stat("/etc/gentoo-release"); err == nil {
-		data["distro"] = &plugins.MetricValue{string("gentoo")}
+		data["distro"] = &MetricValue{string("gentoo")}
 		version, _ = ioutil.ReadFile("/etc/gentoo-release")
 	} else if _, err := os.Stat("/etc/arch-release"); err == nil {
-		data["distro"] = &plugins.MetricValue{string("arch")}
+		data["distro"] = &MetricValue{string("arch")}
 		version = nil
 	} else if _, err := os.Stat("/etc/slackware-version"); err == nil {
-		data["distro"] = &plugins.MetricValue{string("slackware")}
+		data["distro"] = &MetricValue{string("slackware")}
 		version, _ = ioutil.ReadFile("/etc/slackware-version")
 	}
-	data["version"] = &plugins.MetricValue{string(strings.TrimSpace(string(version)))}
+	data["version"] = &MetricValue{string(strings.TrimSpace(string(version)))}
 
 	return self.Name, data
 }

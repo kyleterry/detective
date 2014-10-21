@@ -1,5 +1,8 @@
 package plugins
 
+import (
+)
+
 type MetricValue struct {
 	Val string
 }

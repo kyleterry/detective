@@ -4,7 +4,6 @@ import (
 	stdlog "log"
 	"os"
 	"github.com/kyleterry/detective/plugins"
-	"github.com/kyleterry/detective/utils"
 	"github.com/op/go-logging"
 )
 
@@ -18,24 +17,13 @@ func Init(debug bool) {
 
 func CollectData() map[string]interface{}{
 	data := make(map[string]interface{})
-	switch utils.GetBirdsEyeOSType() {
-		case "linux":
-			log.Debug("On Linux. Registring Linux plugins...")
-			registerLinuxPlugins()
-			for lp := linuxPlugins.plugins.Front(); lp != nil; lp = lp.Next() {
-				plug := lp.Value.(plugins.Plugin)
-				name, d := plug.CollectData()
-				data[name] = d
-			}
-		case "darwin":
-			registerOSXPlugins()
-			log.Debug("On OS X. Registring Darwin plugins...")
-			for op := osxPlugins.plugins.Front(); op != nil; op = op.Next() {
-				plug := op.Value.(plugins.Plugin)
-				name, d := plug.CollectData()
-				data[name] = d
-			}
-			
+	for p := PluginReg.plugins.Front(); p != nil; p = p.Next() {
+		plugin := p.Value.(plugins.Plugin)
+		name, d := plugin.CollectData()
+		if d == nil {
+			log.Error("Error collecting: %s", name)
+		}
+		data[name] = d
 	}
 	return data
 }
