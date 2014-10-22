@@ -16,14 +16,14 @@ const (
 	MeminfoFile = "/proc/meminfo"
 )
 
-func (self Memory) OsType() string {
+func (m *Memory) OsType() string {
 	return "linux"
 }
 
 // Memory.CollectData returns memory information about the system.
 // Values are in KB.
 // Returns a string and a map[string]interface{}.
-func (self Memory) CollectData() (string, map[string]*MetricValue) {
+func (m *Memory) CollectData() (string, map[string]*MetricValue) {
 	data := make(map[string]*MetricValue)
 	file, err := os.Open(MeminfoFile)
 	if err != nil {
@@ -44,7 +44,7 @@ func (self Memory) CollectData() (string, map[string]*MetricValue) {
 		}
 		data[section] = &MetricValue{string(value_int)}
 	}
-	return self.Name, data
+	return m.Name, data
 }
 
 // SplitMeminfoLine splits each line of /proc/meminfo into key/value pairs.

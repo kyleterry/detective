@@ -8,18 +8,20 @@ import (
 	"strings"
 
 	"github.com/kyleterry/detective/utils"
+	"github.com/op/go-logging"
 )
 
+var log = logging.MustGetLogger("detective")
 
 type Platform struct {
 	Name string
 }
 
-func (self Platform) OsType() string {
+func (p *Platform) OsType() string {
 	return "linux"
 }
 
-func (self Platform) CollectData() (string, map[string]*MetricValue) {
+func (p *Platform) CollectData() (string, map[string]*MetricValue) {
 	data := make(map[string]*MetricValue)
 	var version []byte
 	rawLsb, err := utils.GetRawLSB()
@@ -48,5 +50,5 @@ func (self Platform) CollectData() (string, map[string]*MetricValue) {
 	}
 	data["version"] = &MetricValue{string(strings.TrimSpace(string(version)))}
 
-	return self.Name, data
+	return p.Name, data
 }
