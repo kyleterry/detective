@@ -19,7 +19,7 @@ func Init() {
 func fanin(chans []<-chan plugins.Result) chan plugins.Result {
 	out := make(chan plugins.Result)
 	for _, channel := range chans {
-		go func(in chan plugins.Result) {
+		go func(in <-chan plugins.Result) {
 			for result := range in {
 				out <- result
 			}
@@ -29,9 +29,11 @@ func fanin(chans []<-chan plugins.Result) chan plugins.Result {
 }
 
 func CollectData() map[string]interface{}{
-	var wg sync.WaitGroup
-	var channels []<-chan plugins.Result
-	var errchannels []<-chan error
+	var(
+		wg sync.WaitGroup
+		channels []<-chan plugins.Result
+		errchannels []<-chan error
+	)
 	data := make(map[string]interface{})
 	done := make(chan bool)
 	wg.Add(PluginReg.plugins.Len())
