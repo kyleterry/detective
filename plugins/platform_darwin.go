@@ -10,16 +10,12 @@ type Platform struct {
 	Name string
 }
 
-func (p *Platform) OsType() string {
-	return "darwin"
-}
-
-func (p *Platform) CollectData() (string, map[string]*MetricValue) {
+func (p *Platform) CollectData() (string, map[string]*MetricValue, error) {
 	data := make(map[string]*MetricValue)
 	cmd := exec.Command("sw_vers", "-productVersion")
 	ver, err := cmd.Output()
 	if err != nil {
-		log.Fatal(err)
+		return "", nil, err
 	}
 	data["version"] = &MetricValue{string(ver)}
 	return p.Name, data

@@ -16,7 +16,6 @@ func (self *PluginsRegistry) RegisterPlugin(p plugins.Plugin) {
 }
 
 func init() {
-
 	PluginReg.plugins = list.New()
 	platform := &plugins.Platform{"platform"}
 	PluginReg.RegisterPlugin(platform)

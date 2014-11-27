@@ -17,11 +17,7 @@ type Platform struct {
 	Name string
 }
 
-func (p *Platform) OsType() string {
-	return "linux"
-}
-
-func (p *Platform) CollectData() (string, map[string]*MetricValue) {
+func (p Platform) CollectData() (string, map[string]*MetricValue, error) {
 	data := make(map[string]*MetricValue)
 	var version []byte
 	rawLsb, err := utils.GetRawLSB()
@@ -50,5 +46,5 @@ func (p *Platform) CollectData() (string, map[string]*MetricValue) {
 	}
 	data["version"] = &MetricValue{string(strings.TrimSpace(string(version)))}
 
-	return p.Name, data
+	return p.Name, data, nil
 }
