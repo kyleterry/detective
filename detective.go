@@ -42,7 +42,7 @@ func fanin(wg *sync.WaitGroup, chans []<-chan plugins.Result) chan plugins.Resul
 // to merge all the returned channels into one. The out channel is then used to
 // build a map of metric results.
 //
-// Returns a plugin.Collection which is a map of Results keyed by the plugin name.
+// Returns a `plugin.Collection` which is a map of Results keyed by the plugin name.
 func CollectAllMetrics() plugins.Collection {
 	var(
 		wg sync.WaitGroup
@@ -51,8 +51,8 @@ func CollectAllMetrics() plugins.Collection {
 	)
 	data := plugins.NewCollection()
 	done := make(chan bool)
-	wg.Add(PluginReg.plugins.Len())
-	for p := PluginReg.plugins.Front(); p != nil; p = p.Next() {
+	wg.Add(RegisteredPlugins.plugins.Len())
+	for p := RegisteredPlugins.plugins.Front(); p != nil; p = p.Next() {
 		plugin := p.Value.(plugins.DataCollector)
 		c, e := plugins.CollectorWrapper(done, plugin)
 		channels = append(channels, c)

@@ -9,16 +9,18 @@ type PluginsRegistry struct {
 	plugins *list.List
 }
 
-var PluginReg PluginsRegistry
+var RegisteredPlugins PluginsRegistry
 
+// RegisterPlugin is used to add a plugin to the registry for collecting.
+// The plugin must implement the `plugins.DataCollector` interface.
 func (self *PluginsRegistry) RegisterPlugin(p plugins.DataCollector) {
 	self.plugins.PushBack(p)
 }
 
 func init() {
-	PluginReg.plugins = list.New()
+	RegisteredPlugins.plugins = list.New()
 	platform := &plugins.Platform{"platform"}
-	PluginReg.RegisterPlugin(platform)
+	RegisteredPlugins.RegisterPlugin(platform)
 	memory := &plugins.Memory{"memory"}
-	PluginReg.RegisterPlugin(memory)
+	RegisteredPlugins.RegisterPlugin(memory)
 }

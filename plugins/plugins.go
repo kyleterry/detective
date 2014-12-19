@@ -17,8 +17,11 @@ type Result struct {
 
 // DataCollector's must define a CollectData() method.
 //
+// `
 // type MemoryPlugin struct {}
+//
 // func (plug MemoryPlugin) CollectData() (string, map[string]*MetricValue, error) { ... }
+// `
 type DataCollector interface {
 	CollectData() (string, map[string]*MetricValue, error)
 }
