@@ -11,7 +11,7 @@ type PluginsRegistry struct {
 
 var PluginReg PluginsRegistry
 
-func (self *PluginsRegistry) RegisterPlugin(p plugins.Plugin) {
+func (self *PluginsRegistry) RegisterPlugin(p plugins.DataCollector) {
 	self.plugins.PushBack(p)
 }
 

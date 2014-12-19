@@ -10,6 +10,7 @@ import (
 
 var log = logging.MustGetLogger("detective")
 
+// Init is currently used to setup logging. This function might be used for more later.
 func Init() {
 	logBackend := logging.NewLogBackend(os.Stdout, "", stdlog.LstdFlags)
 	logBackend.Color = true
@@ -18,7 +19,8 @@ func Init() {
 
 // fanin will merge all the channels dedicated to collecting metrics into one
 // channel that CollectAllMetrics() can recieve from.
-// It returns a channel that all collectors will be redirected to.
+//
+// Returns a channel that all collectors will be redirected to.
 func fanin(wg *sync.WaitGroup, chans []<-chan plugins.Result) chan plugins.Result {
 	out := make(chan plugins.Result)
 	for _, channel := range chans {
@@ -39,25 +41,27 @@ func fanin(wg *sync.WaitGroup, chans []<-chan plugins.Result) chan plugins.Resul
 // CollectAllMetrics will wrap each plugin in a CollectorWrapper, then use fanin
 // to merge all the returned channels into one. The out channel is then used to
 // build a map of metric results.
-// It returns a map of Results keyed by the plugin name.
-func CollectAllMetrics() map[string]plugins.Result{
+//
+// Returns a plugin.Collection which is a map of Results keyed by the plugin name.
+func CollectAllMetrics() plugins.Collection {
 	var(
 		wg sync.WaitGroup
 		channels []<-chan plugins.Result
 		errchannels []<-chan error
 	)
-	data := make(map[string]plugins.Result)
+	data := plugins.NewCollection()
 	done := make(chan bool)
 	wg.Add(PluginReg.plugins.Len())
 	for p := PluginReg.plugins.Front(); p != nil; p = p.Next() {
-		plugin := p.Value.(plugins.Plugin)
+		plugin := p.Value.(plugins.DataCollector)
 		c, e := plugins.CollectorWrapper(done, plugin)
 		channels = append(channels, c)
 		errchannels = append(errchannels, e)
 	}
 	out := fanin(&wg, channels)
 	for result := range out {
-		data[result.Name] = result
+		data.Items[result.PluginName] = result
 	}
+	close(done)
 	return data
 }
