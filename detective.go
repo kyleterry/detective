@@ -36,6 +36,10 @@ func fanin(wg *sync.WaitGroup, chans []<-chan plugins.Result) chan plugins.Resul
 	return out
 }
 
+// CollectAllMetrics will wrap each plugin in a CollectorWrapper, then use fanin
+// to merge all the returned channels into one. The out channel is then used to
+// build a map of metric results.
+// It returns a map of Results keyed by the plugin name.
 func CollectAllMetrics() map[string]plugins.Result{
 	var(
 		wg sync.WaitGroup
