@@ -16,6 +16,9 @@ func Init() {
 	logging.SetBackend(logBackend)
 }
 
+// fanin will merge all the channels dedicated to collecting metrics into one
+// channel that CollectAllMetrics() can recieve from.
+// It returns a channel that all collectors will be redirected to.
 func fanin(wg *sync.WaitGroup, chans []<-chan plugins.Result) chan plugins.Result {
 	out := make(chan plugins.Result)
 	for _, channel := range chans {
@@ -33,7 +36,7 @@ func fanin(wg *sync.WaitGroup, chans []<-chan plugins.Result) chan plugins.Resul
 	return out
 }
 
-func CollectData() map[string]plugins.Result{
+func CollectAllMetrics() map[string]plugins.Result{
 	var(
 		wg sync.WaitGroup
 		channels []<-chan plugins.Result

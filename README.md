@@ -12,7 +12,7 @@ import "github.com/kyleterry/detective"
 
 func main() {
     detective.Init()
-    d := detective.CollectData()
+    d := detective.CollectAllMetrics()
     fmt.Println(d)
 }
 ```

@@ -5,6 +5,6 @@ import "github.com/kyleterry/detective"
 
 func main() {
 	detective.Init() // true enables debug logging
-	d := detective.CollectData()
+	d := detective.CollectAllMetrics()
 	fmt.Printf("%+v", d)
 }
