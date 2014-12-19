@@ -1,9 +1,5 @@
 package plugins
 
-import(
-	"sync"
-)
-
 type MetricValue struct {
 	Val string
 }
@@ -13,26 +9,25 @@ type Collection struct {
 }
 
 type Result struct {
-	name    string
-	results map[string]*MetricValue
+	Name    string
+	Metrics map[string]*MetricValue
 }
 
-type CollectDataer interface {
+type DataCollector interface {
 	CollectData() (string, map[string]*MetricValue, error)
 }
 
 type Plugin interface {
-	CollectDataer
+	DataCollector
 }
 
-func CollectorWrapper(done <-chan bool, wg *sync.WaitGroup, plug CollectDataer) (<-chan Result, <-chan error) {
+func CollectorWrapper(done <-chan bool, plug DataCollector) (<-chan Result, <-chan error) {
 	c := make(chan Result)
 	errc := make(chan error, 1)
 
 	go func() {
 		defer close(c)
 		defer close(errc)
-		defer wg.Done()
 
 		name, metrics, err := plug.CollectData()
 		if err != nil {

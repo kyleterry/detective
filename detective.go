@@ -16,33 +16,41 @@ func Init() {
 	logging.SetBackend(logBackend)
 }
 
-func fanin(chans []<-chan plugins.Result) chan plugins.Result {
+func fanin(wg *sync.WaitGroup, chans []<-chan plugins.Result) chan plugins.Result {
 	out := make(chan plugins.Result)
 	for _, channel := range chans {
 		go func(in <-chan plugins.Result) {
 			for result := range in {
 				out <- result
 			}
+			wg.Done()
 		}(channel)
 	}
+	go func() {
+		wg.Wait()
+		close(out)
+	}()
 	return out
 }
 
-func CollectData() map[string]interface{}{
+func CollectData() map[string]plugins.Result{
 	var(
 		wg sync.WaitGroup
 		channels []<-chan plugins.Result
 		errchannels []<-chan error
 	)
-	data := make(map[string]interface{})
+	data := make(map[string]plugins.Result)
 	done := make(chan bool)
 	wg.Add(PluginReg.plugins.Len())
 	for p := PluginReg.plugins.Front(); p != nil; p = p.Next() {
 		plugin := p.Value.(plugins.Plugin)
-		c, e := plugins.CollectorWrapper(done, &wg, plugin)
+		c, e := plugins.CollectorWrapper(done, plugin)
 		channels = append(channels, c)
 		errchannels = append(errchannels, e)
 	}
-	out := fanin(channels)
+	out := fanin(&wg, channels)
+	for result := range out {
+		data[result.Name] = result
+	}
 	return data
 }
