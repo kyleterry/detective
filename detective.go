@@ -1,11 +1,11 @@
 package detective
 
 import (
+	"github.com/kyleterry/detective/plugins"
+	"github.com/op/go-logging"
 	stdlog "log"
 	"os"
 	"sync"
-	"github.com/kyleterry/detective/plugins"
-	"github.com/op/go-logging"
 )
 
 var log = logging.MustGetLogger("detective")
@@ -44,9 +44,9 @@ func fanin(wg *sync.WaitGroup, chans []<-chan plugins.Result) chan plugins.Resul
 //
 // Returns a `plugin.Collection` which is a map of Results keyed by the plugin name.
 func CollectAllMetrics() plugins.Collection {
-	var(
-		wg sync.WaitGroup
-		channels []<-chan plugins.Result
+	var (
+		wg          sync.WaitGroup
+		channels    []<-chan plugins.Result
 		errchannels []<-chan error
 	)
 	data := plugins.NewCollection()
