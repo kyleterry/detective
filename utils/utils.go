@@ -1,11 +1,11 @@
 package utils
 
 import (
+	"github.com/op/go-logging"
+	"io/ioutil"
 	"os"
 	"os/exec"
-	"io/ioutil"
 	"runtime"
-	"github.com/op/go-logging"
 )
 
 var log = logging.MustGetLogger("detective")
@@ -43,4 +43,3 @@ func GetRawLSB() (string, error) {
 func GetBirdsEyeOSType() string {
 	return runtime.GOOS
 }
-

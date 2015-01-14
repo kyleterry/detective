@@ -2,10 +2,10 @@
 package plugins
 
 import (
-	"os"
 	"bufio"
-	"strings"
+	"os"
 	"strconv"
+	"strings"
 )
 
 type Memory struct {
@@ -29,7 +29,7 @@ func (m *Memory) CollectData() (string, map[string]*MetricValue, error) {
 	scanner := bufio.NewScanner(file)
 	var (
 		section, value string
-		value_int int
+		value_int      int
 	)
 	for scanner.Scan() {
 		line := scanner.Text()

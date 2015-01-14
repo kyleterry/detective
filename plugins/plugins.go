@@ -11,8 +11,8 @@ type Collection struct {
 
 // Result is a struct that holds a map of metrics for a specific plugin.
 type Result struct {
-	PluginName    string
-	Metrics       map[string]*MetricValue
+	PluginName string
+	Metrics    map[string]*MetricValue
 }
 
 // DataCollector's must define a CollectData() method.
