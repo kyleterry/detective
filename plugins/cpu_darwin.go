@@ -11,7 +11,7 @@ type Cpu struct {
 	Name string
 }
 
-func GetCpuMetric(metric string) (string, error) {
+var GetCpuMetric = func(metric string) (string, error) {
 
 	cmd := exec.Command("sysctl", "-n", metric)
 	result, err := cmd.Output()
@@ -27,11 +27,12 @@ func (m *Cpu) CollectData() (string, map[string]*MetricValue, error) {
 		"real":       "hw.physicalcpu",
 		"total":      "hw.logicalcpu",
 		"mhz":        "hw.cpufrequency",
-		"vendor_id":  "machdep.cpu.brand_string",
-		"model_name": "machdep.cpu.model",
-		"model":      "machdep.cpu.family",
-		"family":     "machdep.cpu.stepping",
-		"stepping":   "machdep.cpu.features",
+        "vendor_id": "machdep.cpu.vendor",
+		"model_name":  "machdep.cpu.brand_string",
+		"model": "machdep.cpu.model",
+		"family":      "machdep.cpu.family",
+		"stepping":     "machdep.cpu.stepping",
+		"flags":   "machdep.cpu.features",
 	}
 
 	data := make(map[string]*MetricValue)
@@ -53,7 +54,11 @@ func (m *Cpu) CollectData() (string, map[string]*MetricValue, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	(*data["mhz"]).Val = string(mhz / 1000)
+    mhzstr := strconv.Itoa(mhz / 1000000)
+	if err != nil {
+		log.Fatal(err)
+	}
+	(*data["mhz"]).Val = mhzstr
 
 	return m.Name, data, nil
 }
