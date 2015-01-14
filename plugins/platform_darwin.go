@@ -2,7 +2,6 @@
 package plugins
 
 import (
-	"log"
 	"os/exec"
 )
 
@@ -18,5 +17,5 @@ func (p *Platform) CollectData() (string, map[string]*MetricValue, error) {
 		return "", nil, err
 	}
 	data["version"] = &MetricValue{string(ver)}
-	return p.Name, data
+	return p.Name, data, nil
 }

@@ -27,12 +27,12 @@ func (m *Cpu) CollectData() (string, map[string]*MetricValue, error) {
 		"real":       "hw.physicalcpu",
 		"total":      "hw.logicalcpu",
 		"mhz":        "hw.cpufrequency",
-        "vendor_id": "machdep.cpu.vendor",
-		"model_name":  "machdep.cpu.brand_string",
-		"model": "machdep.cpu.model",
-		"family":      "machdep.cpu.family",
-		"stepping":     "machdep.cpu.stepping",
-		"flags":   "machdep.cpu.features",
+		"vendor_id":  "machdep.cpu.vendor",
+		"model_name": "machdep.cpu.brand_string",
+		"model":      "machdep.cpu.model",
+		"family":     "machdep.cpu.family",
+		"stepping":   "machdep.cpu.stepping",
+		"flags":      "machdep.cpu.features",
 	}
 
 	data := make(map[string]*MetricValue)
@@ -54,7 +54,7 @@ func (m *Cpu) CollectData() (string, map[string]*MetricValue, error) {
 	if err != nil {
 		log.Fatal(err)
 	}
-    mhzstr := strconv.Itoa(mhz / 1000000)
+	mhzstr := strconv.Itoa(mhz / 1000000)
 	if err != nil {
 		log.Fatal(err)
 	}
