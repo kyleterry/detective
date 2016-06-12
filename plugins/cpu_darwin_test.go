@@ -40,10 +40,10 @@ func TestCollectData_ValidInput(t *testing.T) {
 			return testVals[metric], nil
 		}
 	}
-	GetCpuMetric = SetLookup(testVals)
+	GetCPUMetric = SetLookup(testVals)
 
-	testCpu := &Cpu{"test"}
-	_, data, err := testCpu.CollectData()
+	testCPU := &CPU{"test"}
+	_, data, err := testCPU.CollectData()
 
 	if err != nil {
 		t.Fail()
