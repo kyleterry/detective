@@ -46,6 +46,7 @@ func CollectorWrapper(done <-chan bool, plug DataCollector) (<-chan Result, <-ch
 		name, metrics, err := plug.CollectData()
 		if err != nil {
 			errc <- err
+			return
 		}
 
 		select {

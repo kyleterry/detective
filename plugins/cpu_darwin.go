@@ -5,24 +5,24 @@ import (
 	"log"
 	"os/exec"
 	"strconv"
+	"strings"
 )
 
-type Cpu struct {
+type CPU struct {
 	Name string
 }
 
-var GetCpuMetric = func(metric string) (string, error) {
+var GetCPUMetric = func(metric string) (string, error) {
 
 	cmd := exec.Command("sysctl", "-n", metric)
 	result, err := cmd.Output()
-	return string(result), err
+	return strings.TrimSpace(string(result)), err
 
 }
 
 // Cpu.CollectData returns cpu information about the system.
 // Returns a string and a map[string]MetricValue.
-func (m *Cpu) CollectData() (string, map[string]*MetricValue, error) {
-
+func (m *CPU) CollectData() (string, map[string]*MetricValue, error) {
 	identifiers := map[string]string{
 		"real":       "hw.physicalcpu",
 		"total":      "hw.logicalcpu",
@@ -38,25 +38,23 @@ func (m *Cpu) CollectData() (string, map[string]*MetricValue, error) {
 	data := make(map[string]*MetricValue)
 
 	for metric, sysMetric := range identifiers {
-
-		val, err := GetCpuMetric(sysMetric)
+		val, err := GetCPUMetric(sysMetric)
 
 		if err != nil {
 			log.Fatal(err)
 		}
 
 		data[metric] = &MetricValue{val}
-
 	}
 
 	// Convert the mhz field from hertz to mhz
 	mhz, err := strconv.Atoi((*data["mhz"]).Val)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	mhzstr := strconv.Itoa(mhz / 1000000)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	(*data["mhz"]).Val = mhzstr
 

@@ -2,6 +2,7 @@ package detective
 
 import (
 	"container/list"
+
 	"github.com/kyleterry/detective/plugins"
 )
 
@@ -19,8 +20,7 @@ func (self *PluginsRegistry) RegisterPlugin(p plugins.DataCollector) {
 
 func init() {
 	RegisteredPlugins.plugins = list.New()
-	platform := &plugins.Platform{"platform"}
-	RegisteredPlugins.RegisterPlugin(platform)
-	memory := &plugins.Memory{"memory"}
-	RegisteredPlugins.RegisterPlugin(memory)
+	RegisteredPlugins.RegisterPlugin(&plugins.Platform{"platform"})
+	RegisteredPlugins.RegisterPlugin(&plugins.Memory{"memory"})
+	RegisteredPlugins.RegisterPlugin(&plugins.CPU{"cpu"})
 }
